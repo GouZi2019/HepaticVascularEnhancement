@@ -2,7 +2,8 @@
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkImageRegionConstIterator.h"
-
+#include "itkContourMeanDistanceImageFilter.h"
+#include "itkChangeInformationImageFilter.h"
 
 #include <iostream>
 #include <iomanip>
@@ -47,7 +48,7 @@ void DoSomething(char** argv)
 	typedef typename itk::Image<PixelType, Dimension>								ImageType;
 	typedef typename itk::ImageFileReader<ImageType>								ImageReaderType;
 	typedef typename itk::ImageFileWriter<ImageType>								ImageWriterType;
-
+	
 	/** Read the image. */
 	std::cout << "Loading the the image... " << std::endl;
 	ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -72,7 +73,7 @@ void DoSomething(char** argv)
 	std::cout << "Writing the diffusion image... " << std::endl;
 	ImageWriterType::Pointer writer = ImageWriterType::New();
 	writer->SetFileName(argv[2]);
-	writer->SetInput(filter->GetOutput());
+	writer->SetInput(reader->GetOutput());
 	writer->UseCompressionOn();
 	try
 	{
