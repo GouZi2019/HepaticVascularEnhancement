@@ -1,5 +1,5 @@
-#ifndef itkHepaticVascularPreproccessFilter_h
-#define itkHepaticVascularPreproccessFilter_h
+#ifndef itkHepaticVascularPreprocessFilter_h
+#define itkHepaticVascularPreprocessFilter_h
 
 // ITK includes
 #include "itkMacro.h"
@@ -19,11 +19,11 @@ namespace itk
 {
 
 	template <typename TInputImage = itk::Image<double, 3>, typename TOutputImage = TInputImage>
-	class HepaticVascularPreproccessFilter : public ImageToImageFilter<TInputImage, TInputImage>
+	class HepaticVascularPreprocessFilter : public ImageToImageFilter<TInputImage, TInputImage>
 	{
 	public:
 		/** Standard class typedefs. */
-		typedef HepaticVascularPreproccessFilter                        Self;
+		typedef HepaticVascularPreprocessFilter                        Self;
 		typedef ImageToImageFilter<TInputImage, TInputImage>			Superclass;
 		typedef SmartPointer<Self>                                      Pointer;
 		typedef SmartPointer<const Self>                                ConstPointer;
@@ -32,7 +32,7 @@ namespace itk
 		itkNewMacro(Self);
 
 		/** Run-time type information (and related methods). */
-		itkTypeMacro(HepaticVascularPreproccessFilter, ImageToImageFilter);
+		itkTypeMacro(HepaticVascularPreprocessFilter, ImageToImageFilter);
 
 		/** Typedef to describe the input and output. */
 		typedef TInputImage   InputImageType;
@@ -71,11 +71,10 @@ namespace itk
 		itkGetConstMacro(Alpha, RealType);
 		itkGetConstMacro(Beta, RealType);
 		itkGetConstMacro(MaximumProjectionImage, ProjectionImageointer);
-		itkGetConstMacro(GaussianMixtureModel, std::vector<RealType>);
 
 	protected:
-		HepaticVascularPreproccessFilter() {}
-		~HepaticVascularPreproccessFilter() ITK_OVERRIDE {}
+		HepaticVascularPreprocessFilter() {}
+		~HepaticVascularPreprocessFilter() ITK_OVERRIDE {}
 
 		void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
 
@@ -87,7 +86,7 @@ namespace itk
 
 		ProjectionImageointer           m_MaximumProjectionImage;
 
-		unsigned int					m_NumOfComponents;
+		unsigned int					m_NumOfComponents = 5;
 		RealType						m_MaxValue;
 		RealType                        m_MinValue;
 		RealType						m_ThresholdAbove;
@@ -95,15 +94,14 @@ namespace itk
 		RealType                        m_Alpha;
 		RealType                        m_Beta;
 
-		std::vector<RealType>						m_MixtureCoefficient;
-		std::vector<RealType>						m_ComponentMeanValues;
-		std::vector<RealType>						m_ComponentStdValues;
-		std::vector<RealType>						m_GaussianMixtureModel;
+		std::vector<RealType> 					m_MixtureCoefficient;
+		std::vector<RealType> 					m_ComponentMeanValues;
+		std::vector<RealType> 					m_ComponentStdValues;
 	};
 } // namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkHepaticVascularPreproccessFilter.cpp"
+#include "itkHepaticVascularPreprocessFilter.cpp"
 #endif
 
-#endif // !itkHepaticVascularPreproccessFilter_h
+#endif // !itkHepaticVascularPreprocessFilter_h

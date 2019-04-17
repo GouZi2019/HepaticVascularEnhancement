@@ -1,8 +1,8 @@
 #����cmake�汾��
-cmake_minimum_required(VERSION 3.8.0)
+cmake_minimum_required(VERSION 3.7.0)
 
 #���ù�������
-project(HepaticVascularPreproccess)
+project(HepaticVascularPreprocess)
 
 #���ù��̰�����ǰĿ¼���Ǳ���
 set(CMAKE_INCLUDE_CURRENT_DIR ON) 
@@ -10,7 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #�����Զ�����moc�ļ�����QT�Ļ�һ��Ҫ����
 #set(CMAKE_AUTOMOC ON) 
 
-#������Ҫ��Qt���ļ������ÿһ���ⶼҪд��QtҲ�����������ϵ�Զ�����
+#������Ҫ��Qt���ļ������ÿһ���ⶼҪд��QtҲ�����������ϵ�Զ�����?
 #find_package(Qt5Widgets)  
 #find_package(Qt5Core)
 #find_package(Qt5Gui)

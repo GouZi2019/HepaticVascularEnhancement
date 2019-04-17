@@ -1,8 +1,10 @@
+// itk
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkImageRegionConstIterator.h"
-#include "itkHepaticVascularPreproccessFilter.h"
+#include "itkHepaticVascularPreprocessFilter.h"
+
+// stl
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -19,7 +21,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	typedef float																	PixelType;
+	typedef double																	PixelType;
 	typedef typename itk::Image<PixelType, 3>										ImageType;
 	typedef typename itk::ImageFileReader<ImageType>								ImageReaderType;
 	typedef typename itk::ImageFileWriter<ImageType>								ImageWriterType;
@@ -38,28 +40,29 @@ int main(int argc, char** argv)
 		exit(EXIT_FAILURE);
 	}
 
-	/** Use the filter. */
-	typedef typename itk::HepaticVascularPreproccessFilter<ImageType>				FilterType;
+	// Set parameters.
+	typedef itk::HepaticVascularPreprocessFilter<ImageType>		FilterType;
 	FilterType::Pointer filter = FilterType::New();
 	filter->SetInput(reader->GetOutput());
+	filter->SetNumOfComponents(5);
 	filter->Update();
 
-	///** Write the output image. */
-	//ImageWriterType::Pointer writer = ImageWriterType::New();
-	//writer->SetFileName(argv[2]);
-	//writer->SetInput(reader->GetOutput());
-	//writer->UseCompressionOn();
-	//try
-	//{
-	//	writer->Update();
-	//}
-	//catch (itk::ExceptionObject &err)
-	//{
-	//	std::cerr << "Could not write the image!" << std::endl;
-	//	std::cerr << err << std::endl;
-	//	exit(EXIT_FAILURE);
-	//}
-	
+	/** Write the output image. */
+	ImageWriterType::Pointer writer = ImageWriterType::New();
+	writer->SetFileName(argv[2]);
+	writer->SetInput(filter->GetOutput());
+	writer->UseCompressionOn();
+	try
+	{
+		writer->Update();
+	}
+	catch (itk::ExceptionObject &err)
+	{
+		std::cerr << "Could not write the image!" << std::endl;
+		std::cerr << err << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	system("pause");
 	exit(EXIT_SUCCESS);
 }
