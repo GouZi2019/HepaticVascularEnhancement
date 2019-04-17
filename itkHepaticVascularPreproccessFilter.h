@@ -5,11 +5,15 @@
 #include "itkMacro.h"
 #include "itkImage.h"
 #include "itkVector.h"
+#include "itkListSample.h"
 #include "itkImageToImageFilter.h"
 #include "itkSigmoidImageFilter.h"
 #include "itkThresholdImageFilter.h"
+#include "itkImageRegionConstIterator.h"
 #include "itkMaximumProjectionImageFilter.h"
+#include "itkGaussianMixtureModelComponent.h"
 #include "itkMinimumMaximumImageCalculator.h"
+#include "itkExpectationMaximizationMixtureModelEstimator.h"
 
 namespace itk
 {
@@ -47,34 +51,19 @@ namespace itk
 		typedef typename OutputImageType::Pointer      OutputImagePointer;
 		typedef typename ProjectionImageType::Pointer ProjectionImageointer;
 
-		/** Typedef to describe the pointer to the MinimumMaximumImageCalculator. */
-		typedef typename MinimumMaximumImageCalculator<InputImageType>::Pointer      MinimumMaximumImageCalculatorPointer;
-
-		/** Typedef to describe the pointer to the MaximumProjectionImageFilter. */
-		typedef typename MaximumProjectionImageFilter<InputImageType, ProjectionImageType>::Pointer      MaximumProjectionImageFilterPointer;
-
-		/** Typedef to describe the pointer to the ThresholdImageFilter. */
-		typedef typename ThresholdImageFilter<InputImageType>::Pointer      ThresholdImageFilterPointer;
-
-		/** Typedef to describe the pointer to the GaussianMixtureModelCalculator. */
-		// Todo
-
-		/** Typedef to describe the pointer to the SigmoidImageFilter. */
-		typedef typename SigmoidImageFilter<InputImageType, OutputImageType>::Pointer      SigmoidImageFilterPointer;
-
 		/** Image related typedefs. */
 		itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
 		/** Set & Get Macro. */
 		itkSetMacro(NumOfComponents, unsigned int);
-		itkSetMacro(MixtureCoefficient, std::vector);
-		itkSetMacro(ComponentMeanValues, std::vector);
-		itkSetMacro(ComponentStdValues, std::vector);
+		itkSetMacro(MixtureCoefficient, std::vector<RealType>);
+		itkSetMacro(ComponentMeanValues, std::vector<RealType>);
+		itkSetMacro(ComponentStdValues, std::vector<RealType>);
 
 		itkGetConstMacro(NumOfComponents, unsigned int);
-		itkGetConstMacro(MixtureCoefficient, std::vector);
-		itkGetConstMacro(ComponentMeanValues, std::vector);
-		itkGetConstMacro(ComponentStdValues, std::vector);
+		itkGetConstMacro(MixtureCoefficient, std::vector<RealType>);
+		itkGetConstMacro(ComponentMeanValues, std::vector<RealType>);
+		itkGetConstMacro(ComponentStdValues, std::vector<RealType>);
 		itkGetConstMacro(MaxValue, RealType);
 		itkGetConstMacro(MinValue, RealType);
 		itkGetConstMacro(ThresholdAbove, RealType);
@@ -82,10 +71,10 @@ namespace itk
 		itkGetConstMacro(Alpha, RealType);
 		itkGetConstMacro(Beta, RealType);
 		itkGetConstMacro(MaximumProjectionImage, ProjectionImageointer);
-		itkGetConstMacro(GaussianMixtureModel, std::vector);
+		itkGetConstMacro(GaussianMixtureModel, std::vector<RealType>);
 
 	protected:
-		HepaticVascularPreproccessFilter();
+		HepaticVascularPreproccessFilter() {}
 		~HepaticVascularPreproccessFilter() ITK_OVERRIDE {}
 
 		void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE;
@@ -94,6 +83,8 @@ namespace itk
 		virtual void GenerateData() ITK_OVERRIDE;
 
 	private:
+		void TrainingGMM();
+
 		ProjectionImageointer           m_MaximumProjectionImage;
 
 		unsigned int					m_NumOfComponents;
@@ -104,10 +95,10 @@ namespace itk
 		RealType                        m_Alpha;
 		RealType                        m_Beta;
 
-		std::vector						m_MixtureCoefficient;
-		std::vector						m_ComponentMeanValues;
-		std::vector						m_ComponentStdValues;
-		std::vector						m_GaussianMixtureModel;
+		std::vector<RealType>						m_MixtureCoefficient;
+		std::vector<RealType>						m_ComponentMeanValues;
+		std::vector<RealType>						m_ComponentStdValues;
+		std::vector<RealType>						m_GaussianMixtureModel;
 	};
 } // namespace itk
 
